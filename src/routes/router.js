@@ -4,6 +4,7 @@ import { Addpost, getAllpost } from "../controllers/postcontroller.js"
 import { addlike, getAlllikes } from "../controllers/likecontroller.js"
 import { removeListener } from "process"
 import { addShare, getAllShare } from "../controllers/sharecontroller.js"
+import { addComment, getAllComment } from "../controllers/commentcontroller.js"
 
 const router = express.Router()
 //user api
@@ -20,8 +21,9 @@ router.post("/unlike",removeListener)
 //Share api
 router.post("/share",addShare)
 router.get("/allshare",getAllShare)
-//bookmark api
-
+//comment api
+router.post("/addcomment",addComment)
+router.get("/allcomment",getAllComment)
 
 
 export default router
