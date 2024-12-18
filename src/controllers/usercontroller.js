@@ -1,4 +1,4 @@
-import User from "../models/bloguser.js"
+import User from "../models/user.js"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { v2 as cloudinary} from "cloudinary"
@@ -46,15 +46,19 @@ const registeruser = async (req, res) => {
     if (!email) return res.status(400).json({ message: "Email is required" });
     if (!password) return res.status(400).json({ message: "Password is required" });
     if (!username) return res.status(400).json({ message: "Username is required" });
-    if (!req.file) return res.status(400).json({ message: "User image is required" });
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(409).json({ message: "User already exists" });
 
     // Upload image to Cloudinary
-    const userImageURL = await imageuploadtocloudinary(req.file.path);
-    if (!userImageURL) return res.status(500).json({ message: "Failed to upload user image" });
+    let ImageURL = null;
+
+    // Check if an image file is provided and upload it
+    if (req.file && req.file.path) {
+      ImageURL = await imageuploadtocloudinary(req.file.path);
+    }
+
 
     // Create hashed password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -64,7 +68,7 @@ const registeruser = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      user_image: userImageURL,
+      user_image: ImageURL,
     });
 
     res.status(201).json({
@@ -76,7 +80,7 @@ const registeruser = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
+  
  // login user
 const loginUser = async (req,res) =>{
 
@@ -85,10 +89,10 @@ const loginUser = async (req,res) =>{
     if(!email)return res.json({mesaage:"email is required"})
      if(!password)return res.json({mesaage:"password is required"})
 
-     const user = await User.findOne({email})   
+     const user = await User.findOne({email}).populate("posts")   
      if(!user) return res.status(404).json({mesaage : "User not found"})
       
-      const validpassword = await bcrypt.compare(password,user.password)  
+      const validpassword = await bcrypt.compare(password ,user.password)  
      if(!validpassword) return res.status(400).json({message :"inncorrect password"}) 
       //Token
     const accessToken = generateAccessToken(user);

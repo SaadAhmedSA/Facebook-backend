@@ -1,20 +1,26 @@
 import express from "express"
 import { loginUser, logout,  registeruser } from "../controllers/usercontroller.js"
-import { deleteblog, Editblog, getallblog, getBlogsByUserId, getloginUserBlogs, postBlog } from "../controllers/blogcontroller.js"
-import { upload } from "../middleware/multer.js"
+import { Addpost, getAllpost } from "../controllers/postcontroller.js"
+import { addlike, getAlllikes } from "../controllers/likecontroller.js"
+import { removeListener } from "process"
+import { addShare, getAllShare } from "../controllers/sharecontroller.js"
 
 const router = express.Router()
 //user api
-router.post("/register",upload.single("image"),registeruser)
+router.post("/register",registeruser)
 router.post("/login",loginUser)
 router.get("/logout",logout)
-//blog api
-router.post("/postblog",upload.single("image"),postBlog)
-router.post("/deleteblog/:id" , deleteblog)
-router.post("/editblog/:id" , Editblog)
-router.get("/allblog" , getallblog)
-router.get("/allblogofrandonuser",getBlogsByUserId)
-router.get("/allblogsofloginuser",getloginUserBlogs)
+//post api
+router.post("/addpost",Addpost)
+router.get("/allpost",getAllpost)
+//like api
+router.get("/allike",getAlllikes)
+router.post("/like",addlike)
+router.post("/unlike",removeListener)
+//Share api
+router.post("/share",addShare)
+router.get("/allshare",getAllShare)
+//bookmark api
 
 
 

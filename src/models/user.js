@@ -20,8 +20,12 @@ const userSchema = new mongoose.Schema({
     },
     user_image:{
         type : String,
-        required :true
-    }  
+        required :null
+    },
+    posts:[{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "Post"
+    }]
 }
 ,{timestamps : true}
 )
