@@ -1,8 +1,7 @@
 import express from "express"
 import { loginUser, logout,  registeruser } from "../controllers/usercontroller.js"
 import { Addpost, getAllpost } from "../controllers/postcontroller.js"
-import { addlike, getAlllikes } from "../controllers/likecontroller.js"
-import { removeListener } from "process"
+import { addlike, getAlllikes, removelike } from "../controllers/likecontroller.js"
 import { addShare, getAllShare } from "../controllers/sharecontroller.js"
 import { addComment, getAllComment } from "../controllers/commentcontroller.js"
 
@@ -17,7 +16,7 @@ router.get("/allpost",getAllpost)
 //like api
 router.get("/allike",getAlllikes)
 router.post("/like",addlike)
-router.post("/unlike",removeListener)
+router.post("/unlike",removelike)
 //Share api
 router.post("/share",addShare)
 router.get("/allshare",getAllShare)
